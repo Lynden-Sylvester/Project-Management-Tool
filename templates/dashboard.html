@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang=""en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <title>Task Slash</title>
+</head>
+<body>
+    <div class="center">
+        <h1 class="top">Task Dashboard</h1>
+        <p class="font">Welcome to your task dashboard {{username}}!</p>
+        <p>Click "Create" to make a new table<br>or use the console to create a custom table format</p>
+        <p class="font">For FAQ and contact info visit the Help page</p>
+        <a href="{{ url_for('create_table', username=username)}}"><button>Create</button></a>
+    </div>
+    <div class="center">
+        <h1 class="left">Tables</h1>
+            <div>
+                {% for table_name, table_data_dict in tables_data.items() %}
+                    <pre>{{ table_name }}</pre>
+                    <table class="center-width">
+                        <thead>
+                            <tr>
+                                {% for column in table_data_dict['columns'] %}
+                                <th>{{ column }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <br>
+                        <tbody>
+                            <tr>
+                                {% for row in table_data_dict['rows'] %}
+                                    {% for cell in row %}
+                                        <td><input type="text" placeholder="{{ cell }}" size="15"></td>
+                                    {% endfor %}
+                                {% endfor %}
+                            </tr>
+                        </tbody>
+                    </table>
+                {% endfor %}
+            </div>
+    </div>
+</body>
+</html>

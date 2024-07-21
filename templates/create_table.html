@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Create Table</title>
+</head>
+<body>
+    <div class="center">
+        <h1 class="top">Create a New Table</h1>
+        <form action="{{ url_for('create_table', username=username) }}" method="post">
+            <p>To create multiple columns, please enter a comma to seperate the column names!</p>
+            <label for="table_name">A Table Name:</label>
+            <input type="text" id="table_name" placeholder="Home" name="table_name" required><br>
+            <label for="columns">Column Name:</label>
+            <input type="text" id="columns" placeholder="Task, Est. Time, Priority, Assignee" name="columns" required><br>
+            <button type="submit">Create Table</button>
+        </form>
+    </div>
+</body>
+</html>

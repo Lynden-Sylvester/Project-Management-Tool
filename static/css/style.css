@@ -1,0 +1,55 @@
+.container {
+    height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*border: 3px solid green;*/
+}
+
+.center {
+    margin: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.txt {
+    margin-bottom: 20px;
+}
+
+.header {
+    margin-top: 10%;
+}
+
+.subtext {
+    margin-top: 5%;
+}
+
+.top {
+    margin-top: 1.25%;
+}
+
+.font {
+    font-size: 20px;
+}
+
+.left {
+    margin-left: -10%;
+    width: 100%;
+}
+
+.center-text {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.center-width{
+    margin: 0;
+    margin-left: 35%;
+    width: 20%;
+    text-align: center;
+}
+
+.collapsible {
+    display: none;
+}

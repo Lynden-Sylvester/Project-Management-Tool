@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang=""en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <title>Task Slash</title>
+</head>
+<body>
+    <div class="center">
+        <h1 class="header">Task Slash</h1>
+    </div>
+    <div class="container">
+        <div class="center">
+            <form action="{{url_for('dashboard')}}" method = "POST">
+                <input type="text" placeholder="Username" name="Username" class="txt"><br>
+                <input type="text" placeholder="Password" name="Password" class="txt"><br>
+                <button>Sign In / Up</button>
+            </form>
+            <p class="subtext">Keep track of your tasks all in one place!<br>Slash those tasks off one by one!</p>
+        </div>
+    </div>
+
+
+
+
+
+
+
+</body>
+</html>
