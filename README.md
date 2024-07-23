@@ -1,4 +1,4 @@
-# Project-Management-Tool
+# Task Slash
 This Project is a simple Task Management System that you can run on your local machine.
 
 To start the project:
