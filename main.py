@@ -114,7 +114,12 @@ def create_table(username):
         cur.execute(f"""CREATE TABLE IF NOT EXISTS {table_name} ({fields});""")
         cur.execute("INSERT OR IGNORE INTO tables (table_name) VALUES (?)", (table_name,))
         db.commit()
-        cur.execute(f"""INSERT OR IGNORE INTO {table_name} VALUES (?, ?, ?, ?)""", ("0", "0", "0", "0"))
+
+        cur.execute(f"PRAGMA table_info({table_name});")
+        num_columns = len(cur.fetchall())
+
+        placeholders = ", ".join(["?"] * num_columns)
+        cur.execute(f"""INSERT OR IGNORE INTO {table_name} VALUES ({placeholders})""", tuple(["0"] * num_columns))
         db.commit()
         return redirect(url_for('dashboard', username=username))
     else:
