@@ -22,7 +22,7 @@ def home():
 
 @app.route('/dashboard', methods = ['POST', 'GET'])
 def dashboard():
-    username = request.form.get('Username') if (request.method == 'POST') or (request.method == 'GET') else request.args.get('username', '')
+    username = request.form.get('Username') if request.method == 'POST' else request.args.get('username', '')
     tables_data = {}
 
     if request.method == 'POST':
