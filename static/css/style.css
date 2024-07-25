@@ -53,3 +53,18 @@
 .collapsible {
     display: none;
 }
+
+.logout, .help {
+    position: absolute;
+    top: 15px; /* Distance from the top */
+}
+
+.logout {
+    left: 0;
+    transform: translateX(75%); /* Move left by 3/4th of its width */
+}
+
+.help {
+    right: 0;
+    transform: translateX(-125%); /* Move right by 3/4th of its width */
+}

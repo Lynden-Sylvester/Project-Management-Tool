@@ -6,6 +6,12 @@
     <title>Task Slash</title>
 </head>
 <body>
+    <div style="position: relative">
+        <a href="{{ url_for('home')}}" class="logout"><button>Log Out</button></a>
+        <a href="{{ url_for('help')}}" class="help"><button>Help</button></a>    
+    </div>
+  
+
     <div class="center">
         <h1 class="top">Task Dashboard</h1>
         <p class="font">Welcome to your task dashboard {{username}}!</p>
