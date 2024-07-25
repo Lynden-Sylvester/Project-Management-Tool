@@ -22,7 +22,7 @@ def home():
 
 @app.route('/dashboard', methods = ['POST', 'GET'])
 def dashboard():
-    username = request.form.get('Username') if request.method == 'POST' else request.args.get('username', '')
+    username = request.form.get('Username') if (request.method == 'POST') or (request.method == 'GET') else request.args.get('username', '')
     tables_data = {}
 
     if request.method == 'POST':
@@ -79,7 +79,8 @@ def dashboard():
             
             else:
                 return redirect(url_for("dashboard", username=username))
-    else:
+            
+    if request.method == 'GET':
         if username:
                 db = sqlite3.connect(f"{username}.db")
                 cur = db.cursor()
@@ -99,7 +100,17 @@ def dashboard():
                 print(f'Table List/\: {tables_list}')
                 return render_template("dashboard.html", username = username, tables_data=tables_data)
         else:
-            return redirect(url_for('home'))
+                username = request.args.get('username', '')
+                password = request.args.get('password', '')
+                print(f' Start Username: {username}')
+                with sqlite3.connect("taskslash.db") as con:
+                     cur = con.cursor()
+                     cur.execute("""UPDATE users SET username = ? WHERE password = ?""", (username, password))
+                     con.commit()
+                     user = cur.execute("""SELECT * FROM users;""").fetchone()
+                     username = user[1]
+                     print(f"Username = {username}")
+                return render_template("dashboard.html", username = username, tables_data=tables_data)
 
 @app.route("/create_table/<username>", methods=["GET", "POST"])
 def create_table(username):
