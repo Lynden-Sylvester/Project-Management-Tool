@@ -1,1 +1,22 @@
-<link rel="icon" href="static/TaskSlash.png" type="image/png" sizes="500x500">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="static/TaskSlash.png" type="image/png" sizes="500x500">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <title>Task Slash</title>
+</head>
+<body>
+    <a href="{{ url_for('dashboard')}}" class="logout"><button>Back</button></a>
+    <div class="center">
+        <h1 class="header">FAQ</h1>
+    </div>
+    <div class="center">
+        <h2>Q: How do I add a task?</h2>
+        <p>A: Clicking the + icon next to the table will create a new task you can directly type into</p>
+        <h2>Q: How do I update a task?</h2>
+        <p>A: Clicking the ^ icon next to the table will open a textbox to easily edit the task</p>
+        <h2>Q: I want to make a custom table tmplate, but I don't know how to</h2>
+        <p>A: The console allows you to create custom templates by typing <b style="color:green">"new template" template_name col_1 col_2 col_3</b></p>
+    </div>
+</body>
+</html>

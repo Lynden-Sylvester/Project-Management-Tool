@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang=""en">
+<html lang="en">
 <head>
     <link rel="icon" href="static/TaskSlash.png" type="image/png" sizes="500x500">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
     <title>Task Slash</title>
 </head>
 <body>
@@ -24,6 +26,8 @@
             <div>
                 {% for table_name, table_data_dict in tables_data.items() %}
                     <pre>{{ table_name }}</pre>
+                    <button id="popupTrigger2">Delete</button>
+
                     <table class="center-width">
                         <thead>
                             <tr>
@@ -46,5 +50,41 @@
                 {% endfor %}
             </div>
     </div>
+    <div class="center">
+        <p class="left"></p><input type="checkbox" id="myCheckbox" class="showHideCheck">Console</p>
+        <button id="popupTrigger" class="left-side">?</button>
+        <input type="text" class="consoleInput" style="display:none;">
+    </div>
+    <div id="popup" class="popup">
+        <div class="container2">
+            <div class="center">
+                <h2>Console Manual</h2>
+                <h3>Create Table</h3>
+                <p>if no templates set, it will use the default template</p>
+                <p>Ex. table create name template: template name</p>
+                <h3>Creating Custom Table</h3>
+                <p>Custom tables can have as many columns as you specify</p>
+                <p>Ex. table create name col_1 col_2 col_3</p>
+                <h3>Creating Templates</h3>
+                <p>Ex. new template_name col_1 col_2 col_3</p>
+                <h3>Adding Tasks</h3>
+                <p>Ex.task add task_name col_1 col_2 col_3</p>
+                <h3>Updating Tasks</h3>
+                <p>Ex. task update task_name col_1 col_2 col_3</p>
+            </div>
+        </div>
+    </div>
+    <div id="popup2" class="popup2">
+        <div class="container2">
+            <div class="center">
+                <br>
+                <p>Are you sure you want to delete this table?</p>
+                <p>"Deleting this table will delete it permanently"</p>
+                <br>
+                <p><button id="confirm" class="right-side">Yes</button><button id="cancel" class="right">Cancel</button></p>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='site.js') }}"></script>
 </body>
 </html>

@@ -36,14 +36,14 @@ def dashboard():
             username TEXT,
             password TEXT);""")
             con.commit()
-            cur.execute("INSERT INTO users (username, password) VALUES (?, ?)",(username, password))
+            cur.execute("INSERT INTO users (username, password) VALUES (?, ?)",("0", password))
             con.commit()
-            cur.execute("SELECT * FROM users WHERE username =?", (username,))    
+            cur.execute("SELECT * FROM users WHERE password =?", (password,))    
             user = cur.fetchone()
             print(user)
             print(username)
             print(user[1])
-            if user[1] == username:    
+            if user[1] != username:    
                 cur.execute("INSERT INTO users (username, password) VALUES (?, ?)",(username, password))
                 con.commit()
                 msg = "User record successfully added"
@@ -78,7 +78,7 @@ def dashboard():
                 return render_template("dashboard.html", username=username, tables_data=tables_data) # Displays Dashboard with no Tables
             
             else:
-                return render_template("dashboard.html")
+                return redirect(url_for("dashboard", username=username))
     else:
         if username:
                 db = sqlite3.connect(f"{username}.db")
@@ -98,7 +98,6 @@ def dashboard():
                 print(f'username/\: {username}')
                 print(f'Table List/\: {tables_list}')
                 return render_template("dashboard.html", username = username, tables_data=tables_data)
-
         else:
             return redirect(url_for('home'))
 
