@@ -101,8 +101,8 @@ def dashboard():
                 print(f'Table List/\: {tables_list}')
                 return render_template("dashboard.html", username = username, tables_data=tables_data)
         else:
-                username = request.args.get('username', '')
-                password = request.args.get('password', '')
+                username = request.args.get('username', '') # Suspected of causing Help navigation & SQL error
+                password = request.args.get('password', '') # Suspected of causing Help navigation & SQL error
                 print(f' Start Username: {username}')
                 print(f"Start Passsword: {password}")
                 with sqlite3.connect("taskslash.db") as con:
@@ -155,7 +155,7 @@ def create_table(username):
 
 @app.route('/help')
 def help():
-    username = request.args.get('username', '')
+    username = request.args.get('username', '') # Suspected incorrect retreival of username
     with sqlite3.connect("taskslash.db") as con:
         cur = con.cursor()
         cur.execute("SELECT username FROM users WHERE username =?", (username,))
