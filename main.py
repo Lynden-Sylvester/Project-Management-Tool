@@ -16,7 +16,7 @@ con.execute("""CREATE TABLE IF NOT EXISTS users (
 print("Table created successfully")
 con.close()
 
-@app.route('/home')
+@app.route('/')
 def home():
     return render_template("index.html")
 
@@ -36,7 +36,7 @@ def dashboard():
             username TEXT,
             password TEXT);""")
             con.commit()
-            cur.execute("INSERT INTO users (username, password) VALUES (?, ?)",("0", password))
+            cur.execute("INSERT INTO users (username, password) VALUES (?, ?)",(username, password))
             con.commit()
             cur.execute("SELECT * FROM users WHERE password =?", (password,))    
             user = cur.fetchone()
@@ -52,6 +52,20 @@ def dashboard():
                 user_db_path = f"{username}.db"
                 db = sqlite3.connect(f"{user_db_path}")
 
+                db = sqlite3.connect(f"{username}.db")
+                cur = db.cursor()
+                
+                cur1 = con.cursor()
+                cur1.execute("SELECT * FROM users;")
+                print(f'Username: {username} & Password: {password}!')
+                print(f'Username: {username}!')
+                return render_template("dashboard.html", username=username, tables_data=tables_data) # Displays Dashboard with no Tables
+            
+            else:
+                return redirect(url_for("dashboard", username=username))
+            
+    if request.method == 'GET':
+        if username:
                 db = sqlite3.connect(f"{username}.db")
                 cur = db.cursor()
                 cur.execute("""CREATE TABLE IF NOT EXISTS tables (
@@ -71,19 +85,6 @@ def dashboard():
                 cur.execute("INSERT OR IGNORE INTO example VALUES (?, ?, ?, ?)", ('Laundry', '2hrs', 'high', 'James'))
                 db.commit()
                 cur.execute("SELECT * FROM example;")
-                cur1 = con.cursor()
-                cur1.execute("SELECT * FROM users;")
-                print(f'Username: {username} & Password: {password}!')
-                print(f'Username: {username}!')
-                return render_template("dashboard.html", username=username, tables_data=tables_data) # Displays Dashboard with no Tables
-            
-            else:
-                return redirect(url_for("dashboard", username=username))
-            
-    if request.method == 'GET':
-        if username:
-                db = sqlite3.connect(f"{username}.db")
-                cur = db.cursor()
                 db.commit()
                 print(f"tables added to tables table")
                 cur.execute("""SELECT table_name FROM tables;""")
@@ -110,6 +111,21 @@ def dashboard():
                      user = cur.execute("""SELECT * FROM users;""").fetchone()
                      username = user[1]
                      print(f"Username = {username}")
+                with sqlite3.connect(f"{username}.db") as con1:
+                    cur1 = con1.cursor()
+                    cur1.execute("""SELECT table_name FROM tables;""")
+                    tables_list = [row[0] for row in cur.fetchall()]
+                    for table_name in tables_list:
+                        cur.execute(f"PRAGMA table_info({table_name});")
+                        columns = [column[1] for column in cur.fetchall()]
+                        cur.execute(f"SELECT * FROM {table_name};")
+                        rows = cur.fetchall()
+                        tables_data[table_name] = {'columns': columns, 'rows' : rows}
+                        print(f'table rows--: {tables_data}')
+                        print(f'all rows--: {rows}')
+                    print(f'username/\/\: {username}')
+                    print(f'Table List/\/\: {tables_list}')
+                username = str(username)
                 return render_template("dashboard.html", username = username, tables_data=tables_data)
 
 @app.route("/create_table/<username>", methods=["GET", "POST"])
@@ -131,6 +147,7 @@ def create_table(username):
         placeholders = ", ".join(["?"] * num_columns)
         cur.execute(f"""INSERT OR IGNORE INTO {table_name} VALUES ({placeholders})""", tuple(["0"] * num_columns))
         db.commit()
+        print(f"Create Table Username: {username}")
         return redirect(url_for('dashboard', username=username))
     else:
         return render_template("create_table.html", username=username)
