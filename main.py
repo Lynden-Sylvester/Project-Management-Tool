@@ -104,6 +104,7 @@ def dashboard():
                 username = request.args.get('username', '')
                 password = request.args.get('password', '')
                 print(f' Start Username: {username}')
+                print(f"Start Passsword: {password}")
                 with sqlite3.connect("taskslash.db") as con:
                      cur = con.cursor()
                      cur.execute("""UPDATE users SET username = ? WHERE password = ?""", (username, password))
@@ -154,7 +155,11 @@ def create_table(username):
 
 @app.route('/help')
 def help():
-    return render_template("help.html")
+    username = request.args.get('username', '')
+    with sqlite3.connect("taskslash.db") as con:
+        cur = con.cursor()
+        cur.execute("SELECT username FROM users WHERE username =?", (username,))
+    return render_template("help.html", username=username)
 
 
 
