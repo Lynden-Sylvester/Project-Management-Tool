@@ -101,8 +101,8 @@ def dashboard():
                 print(f'Table List/\: {tables_list}')
                 return render_template("dashboard.html", username = username, tables_data=tables_data)
         else:
-                username = request.args.get('username', '') # Suspected of causing Help navigation & SQL error
-                password = request.args.get('password', '') # Suspected of causing Help navigation & SQL error
+                username = request.args.get('username', '')
+                password = request.args.get('password', '')
                 print(f' Start Username: {username}')
                 print(f"Start Passsword: {password}")
                 with sqlite3.connect("taskslash.db") as con:
@@ -127,8 +127,11 @@ def dashboard():
                         print(f'all rows--: {rows}')
                     print(f'username/\/\: {username}')
                     print(f'Table List/\/\: {tables_list}')
-                username = str(username)
-                return render_template("dashboard.html", username = username, tables_data=tables_data)
+                # Username being passed as an empty string despite 
+                # having a string to route with that is not an empty string
+                print(username)
+                return redirect(url_for('dashboard', username=username))
+                #return render_template("dashboard.html", username=username, tables_data=tables_data)
 
 @app.route("/create_table/<username>", methods=["GET", "POST"])
 def create_table(username):
@@ -157,7 +160,7 @@ def create_table(username):
 
 @app.route('/help')
 def help():
-    username = request.args.get('username', '') # Suspected incorrect retreival of username
+    username = request.args.get('username', '')
     with sqlite3.connect("taskslash.db") as con:
         cur = con.cursor()
         cur.execute("SELECT username FROM users WHERE username =?", (username,))
