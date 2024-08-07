@@ -127,11 +127,7 @@ def dashboard():
                         print(f'all rows--: {rows}')
                     print(f'username/\/\: {username}')
                     print(f'Table List/\/\: {tables_list}')
-                # Username being passed as an empty string despite 
-                # having a string to route with that is not an empty string
-                print(username)
                 return redirect(url_for('dashboard', username=username))
-                #return render_template("dashboard.html", username=username, tables_data=tables_data)
 
 @app.route("/create_table/<username>", methods=["GET", "POST"])
 def create_table(username):
