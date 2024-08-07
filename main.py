@@ -2,16 +2,18 @@ from flask import Flask , render_template, request, redirect, url_for
 from threading import Thread
 import sqlite3
 import sys
-import zmq
+#import zmq
 import json
 from datetime import datetime, timedelta
 
 
 app = Flask(__name__)
 
+# Create a Database called taskslash
 con = sqlite3.connect('taskslash.db')
 print('Opened Database Successfully')
 
+# Create a Table in the database to store user creds
 con.execute("""CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT,
@@ -25,10 +27,14 @@ def home():
 
 @app.route('/dashboard', methods = ['POST', 'GET'])
 def dashboard():
+    
+    # Fetch the username from the form submission on the home path
     username = request.form.get('Username') if request.method == 'POST' else request.args.get('username', '')
     tables_data = {}
 
     if request.method == 'POST':
+
+        # Fetch data from the form
         username = request.form['Username']
         password = request.form['Password']
 
@@ -52,6 +58,7 @@ def dashboard():
                 msg = "User record successfully added"
                 print(msg)
 
+                # Create a User Database
                 user_db_path = f"{username}.db"
                 db = sqlite3.connect(f"{user_db_path}")
 
@@ -62,12 +69,19 @@ def dashboard():
                 cur1.execute("SELECT * FROM users;")
                 print(f'Username: {username} & Password: {password}!')
                 print(f'Username: {username}!')
-                return render_template("dashboard.html", username=username, tables_data=tables_data) # Displays Dashboard with no Tables
+
+                # Send User to their Empty Dashboard
+                return render_template("dashboard.html", username=username, tables_data=tables_data)
             
             else:
+
+                # Send Returning Users to their dashboard
                 return redirect(url_for("dashboard", username=username))
             
     if request.method == 'GET':
+
+        # In the User's Database, create a table to keep
+        # track of all the tables they make via the table name
         if username:
                 db = sqlite3.connect(f"{username}.db")
                 cur = db.cursor()
@@ -102,12 +116,16 @@ def dashboard():
                     print(f'all rows: {rows}')
                 print(f'username/\: {username}')
                 print(f'Table List/\: {tables_list}')
+
+                # Display the User's Dashboard with the tables
                 return render_template("dashboard.html", username = username, tables_data=tables_data)
         else:
                 username = request.args.get('username', '')
                 password = request.args.get('password', '')
                 print(f' Start Username: {username}')
                 print(f"Start Passsword: {password}")
+
+                # open the user Table from taskslash database and update the username
                 with sqlite3.connect("taskslash.db") as con:
                      cur = con.cursor()
                      cur.execute("""UPDATE users SET username = ? WHERE password = ?""", (username, password))
@@ -115,6 +133,8 @@ def dashboard():
                      user = cur.execute("""SELECT * FROM users;""").fetchone()
                      username = user[1]
                      print(f"Username = {username}")
+
+                # Open the User's database and read all the tables
                 with sqlite3.connect(f"{username}.db") as con1:
                     cur1 = con1.cursor()
                     cur1.execute("""SELECT table_name FROM tables;""")
@@ -130,10 +150,14 @@ def dashboard():
                         print(f'all rows--: {rows}')
                     print(f'username/\/\: {username}')
                     print(f'Table List/\/\: {tables_list}')
+
+                # Send the User to their Dashboard with all their tables
                 return redirect(url_for('dashboard', username=username))
 
 @app.route("/create_table/<username>", methods=["GET", "POST"])
 def create_table(username):
+
+    # Create a new table with a single row containing placeholder values
     if request.method == "POST":
         table_name = request.form["table_name"]
         print(f'Table name: {table_name}')
@@ -153,8 +177,13 @@ def create_table(username):
         cur.execute(f"""INSERT OR IGNORE INTO {table_name} VALUES ({placeholders})""", tuple(["0"] * num_columns))
         db.commit()
         print(f"Create Table Username: {username}")
+
+        # Send the User back to their dashboard
+        # Which is now populated with the new table
         return redirect(url_for('dashboard', username=username))
     else:
+
+        # Otherwise stay on the current page
         return render_template("create_table.html", username=username)
 
 @app.route('/help')
@@ -163,6 +192,8 @@ def help():
     with sqlite3.connect("taskslash.db") as con:
         cur = con.cursor()
         cur.execute("SELECT username FROM users WHERE username =?", (username,))
+
+    # Display the Help Page
     return render_template("help.html", username=username)
 
 
