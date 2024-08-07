@@ -115,11 +115,12 @@ def dashboard():
                 with sqlite3.connect(f"{username}.db") as con1:
                     cur1 = con1.cursor()
                     cur1.execute("""SELECT table_name FROM tables;""")
-                    tables_list = [row[0] for row in cur.fetchall()]
+                    print(cur1.fetchall())
+                    tables_list = [row[0] for row in cur1.fetchall()]
                     for table_name in tables_list:
-                        cur.execute(f"PRAGMA table_info({table_name});")
-                        columns = [column[1] for column in cur.fetchall()]
-                        cur.execute(f"SELECT * FROM {table_name};")
+                        cur1.execute(f"PRAGMA table_info({table_name});")
+                        columns = [column[1] for column in cur1.fetchall()]
+                        cur1.execute(f"SELECT * FROM {table_name};")
                         rows = cur.fetchall()
                         tables_data[table_name] = {'columns': columns, 'rows' : rows}
                         print(f'table rows--: {tables_data}')
@@ -133,6 +134,7 @@ def dashboard():
 def create_table(username):
     if request.method == "POST":
         table_name = request.form["table_name"]
+        print(f'Table name: {table_name}')
         columns = request.form["columns"].split(',')
         columns = [col.strip() for col in columns]
         db = sqlite3.connect(f'{username}.db')
