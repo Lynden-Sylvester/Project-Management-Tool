@@ -53,7 +53,10 @@
     <div class="center">
         <p class="left"></p><input type="checkbox" id="myCheckbox" class="showHideCheck">Console</p>
         <button id="popupTrigger" class="left-side">?</button>
-        <input type="text" class="consoleInput" placeholder="Enter..." style="display:none;">
+        <input type="text" class="consoleInput" id="consoleInput" placeholder="Enter..." onkeypress="consoleSubmission(event)" ="display:none;">
+    </div>
+    <div>
+        <button id="testButton" onclick="consoleSubmission(event)">Test Button</button>
     </div>
     <div id="popup" class="popup">
         <div class="container3">
