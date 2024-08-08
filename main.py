@@ -71,8 +71,8 @@ def console_database_request(data):
 
     context = zmq.Context()
     socket = context.socket(zmq.REQ)
-    socket.bind("tcp://*:5557")
-    request = {data}
+    socket.bind("tcp://localhost:5557")
+    request = data
 
     socket.send_json(request)
     response = socket.recv_json()
