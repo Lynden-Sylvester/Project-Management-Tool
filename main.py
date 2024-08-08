@@ -1,4 +1,4 @@
-from flask import Flask , render_template, request, redirect, url_for
+from flask import Flask , render_template, request, redirect, url_for, abort, jsonify
 from threading import Thread
 import sqlite3
 import sys
@@ -43,12 +43,55 @@ con.execute("""CREATE TABLE IF NOT EXISTS users (
 print("Table created successfully")
 con.close()
 
+def check_content_type(content_type) -> None:
+
+    if "Content-Type" not in request.headers:
+        app.logger.error("No Content-Type specified")
+        abort(
+            f"Content-Type must be {content_type}"
+        )
+
+    if request.headers["Content-Type"] == content_type:
+        return
+    
+    app.logger.error("Invalid Content-Type: %s", request.headers["Content-Type"])
+    app.logger.info(f"Reuest Headers: {request.headers}")
+    abort(f"Content-Type must be {content_type}")
+
+def consoleOutputFromJS():
+    app.logger.info("Requesting Console Data...")
+    check_content_type("application/json")
+
+    # Get data from the request
+    data = request.get_json()
+    app.logger.info("Processing: %s", data)
+    console_database_request(data)
+
+def console_database_request(data):
+
+    context = zmq.Context()
+    socket = context.socket(zmq.REQ)
+    socket.bind("tpc://*5556")
+    request = {data}
+
+    socket.send_json(request)
+    response = socket.recv_json()
+    print(f"Console Response: {response}")
+
+@app.route('/test', methods = ['POST'])
+def test():
+    consoleOutputFromJS()
+    return 'success'
+
 @app.route('/')
 def home():
     return render_template("index.html")
 
 @app.route('/dashboard', methods = ['POST', 'GET'])
 def dashboard():
+
+    
+
 
     # Fetch the username from the form submission on the home path
     username = request.form.get('Username') if request.method == 'POST' else request.args.get('username', '')

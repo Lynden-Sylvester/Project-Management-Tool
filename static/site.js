@@ -21,23 +21,27 @@ $(document).ready(function(){
 function consoleSubmission(event) {
     if (event.keyCode == 13) {
         var consoleOutput = document.getElementById("consoleInput").value;
-        writeToFile(filename, consoleOutput);
+        let data = {
+            "console": consoleOutput
+        }
+        
+
+        let ajax = $.ajax({
+            type: "POST",
+            url: "/test",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        });
+
     }
     else {
         document.getElementById('testButton').innerHTML = "This is a test";
     }
 }
-
-// Write content to file
-function writeToFile(filename, content) {
-    fs.writeFile(filename, content, (err) => {
-      if (err) {
-        console.error('Error writing file:', err);
-      } else {
-        console.log('Successfully wrote file.');
-      }
-    });
-  }
   
 
 document.getElementById("consoleInput").addEventListener("keypress", consoleSubmission)
