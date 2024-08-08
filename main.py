@@ -2,11 +2,31 @@ from flask import Flask , render_template, request, redirect, url_for
 from threading import Thread
 import sqlite3
 import sys
-#import zmq
+import zmq
 import json
 from datetime import datetime, timedelta
 
+def send_notification_request(title, message, delay_seconds=0):
+    context = zmq.Context()
+    sender = context.socket(zmq.PUSH)
+    sender.connect("tcp://localhost:5555")
 
+    notification_time = datetime.now() + timedelta(seconds=delay_seconds)
+    
+    notification = {
+        "type": "notification",
+        "id": "unique_id_here",  # You should generate a unique ID for each notification
+        "title": title,
+        "message": message,
+        "time": notification_time.strftime("%Y-%m-%d %H:%M:%S")
+    }
+    
+    sender.send_json(notification)
+    sender.close()
+    context.term()
+
+# Example call
+send_notification_request("Test Notification", "This is a test message", 10)
 app = Flask(__name__)
 
 # Create a Database called taskslash
@@ -27,7 +47,7 @@ def home():
 
 @app.route('/dashboard', methods = ['POST', 'GET'])
 def dashboard():
-    
+
     # Fetch the username from the form submission on the home path
     username = request.form.get('Username') if request.method == 'POST' else request.args.get('username', '')
     tables_data = {}
