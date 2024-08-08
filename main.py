@@ -27,6 +27,8 @@ def send_notification_request(title, message, delay_seconds=0):
 
 # Example call
 send_notification_request("Test Notification", "This is a test message", 10)
+
+
 app = Flask(__name__)
 
 # Create a Database called taskslash
