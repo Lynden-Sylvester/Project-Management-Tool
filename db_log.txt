@@ -1,0 +1,4 @@
+Test
+{'ConsoleInput': {'console': 'create table test study 30 2024-08-08'}, 'Process Date': datetime.datetime(2024, 8, 8, 22, 34, 42, 912238)}
+
+{'ConsoleInput': {'console': 'create table test study 30 2024-08-09'}, 'Process Date': datetime.datetime(2024, 8, 8, 22, 36, 40, 68230)}
