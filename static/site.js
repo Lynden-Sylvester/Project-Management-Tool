@@ -1,6 +1,3 @@
-const fs = require('fs');
-let filename = "console.txt";
-
 // Toggle for Console Input Field
 $(document).ready(function(){
     $(".consoleInput").hide();
@@ -56,9 +53,7 @@ function consoleSubmission(event) {
         });
 
     }
-    else {
-        document.getElementById('testButton').innerHTML = "This is a test";
-    }
+    
 }
   
 
