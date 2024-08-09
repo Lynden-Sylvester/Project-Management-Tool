@@ -5,6 +5,7 @@ import sys
 import zmq
 import json
 from datetime import datetime, timedelta
+import time
 
 def send_notification_request(title, message, delay_seconds=0):
     context = zmq.Context()
@@ -77,6 +78,24 @@ def console_database_request(data):
     socket.send_json(request)
     response = socket.recv_json()
     print(f"Console Response: {response}")
+
+@app.route('/generate', methods = ['POST', 'GET'])
+def generate():
+    with open('prng-service.txt', 'w') as file:
+        file.write("run")
+    time.sleep(5)
+
+    with open("prng-service.txt", "r") as file:
+      content = file.read()
+
+    with open("image-service.txt", "w") as file:
+      file.write(content)
+    time.sleep(5)
+
+    with open("image-service.txt", "r") as file:
+        content = file.read()
+
+    return render_template("index.html", image_path=content)
 
 @app.route('/test', methods = ['POST'])
 def test():

@@ -11,11 +11,20 @@
     </div>
     <div class="container">
         <div class="center">
+            <form method = "POST" action = "/generate">
+                <button>Roll Image</button>
+            </form>
+            <img src="{{image_path}}">
+            <br>
+            <br>
+            <br>
+            <br>
             <form action="{{url_for('dashboard')}}" method = "POST">
                 <input type="text" placeholder="Username" name="Username" class="txt"><br>
                 <input type="text" placeholder="Password" name="Password" class="txt"><br>
                 <button>Sign In / Up</button>
             </form>
+            
             <p class="subtext">Keep track of your tasks all in one place!<br>Slash those tasks off one by one!</p>
         </div>
     </div>
